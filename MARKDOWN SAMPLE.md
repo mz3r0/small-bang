@@ -1,18 +1,33 @@
 # H1 - Markdown Format Testing
 
-A detailed guide to Markdown can be found [here](https://www.markdownguide.org/basic-syntax/). HTML tags can also be used for rendering in Markdown files, such as: `br`, `p`, `a`, `blockquote`, `img`, `sub`, `sup`, `details`, `summary`, `h1`, `h6`, etc.
-Typically unsupported tags: style, script, table, form, input, button, iframe. Additionally, HTML entity codes also work: `&lt;` for `<`, `&amp;` for `&`, and so on.
-[HTML Tags Reference](https://www.w3schools.com/tags/)
+From the [official docs](https://github.github.com/gfm/ "GitHub Flavored Markdown documentation") "GitHub Flavored Markdown (GFM) is the dialect of Markdown that is currently supported for user content on GitHub.com and GitHub Enterprise."
 
-Pending read - John Gruber's [guide](https://daringfireball.net/projects/markdown/syntax) to markdown.
+It is a strict superset of CommonMark, following its specification exactly except for tables, strikethrough, autolinks and task lists, which GFM adds as extensions (from [Wikipedia](https://en.wikipedia.org/wiki/Markdown "Wikipedia Markdown")). These enhancements have been widely adopted and supported by various Markdown processors and platforms, beyond just GitHub.
 
-I didn't include code blocks to show both format and result like other guides for simplicity's sake.
+CommonMark is just a formal version of Markdown syntax with a spec whose goal is to remove the ambiguities and inconsistency surrounding the original Markdown specification.
+
+HTML tags can be used directly in Markdown files. Some examples: `br`, `p`, `a`, `blockquote`, `img`, `sub`, `sup`, `details`, `summary`, `h1`, `h6`, etc.
+Typically unsupported tags: `title`, `textarea`, `style`, `xmp`, `iframe`, `noembed`, `noframes`, `script`, `plaintext`. I haven't found any info on `table`, `form`, `input`, `button` so I'll have to test these at some point. HTML entity codes also work: `&lt;` for `<`, `&amp;` for `&`, etc.
+
+**Useful Links**
+
+- [HTML Tags W3S Reference](https://www.w3schools.com/tags/ "w3schools")
+- [Simple guide to Markdown](https://www.markdownguide.org/basic-syntax/)
+- [John Gruber's guide to Markdown](https://daringfireball.net/projects/markdown/syntax "Official Markdown docs")
+- Fletcher T. Penney's [MultiMarkdown](https://en.wikipedia.org/wiki/MultiMarkdown "Wikipedia MultiMarkdown") and its
+[Syntax Guide](https://github.com/fletcher/MultiMarkdown/wiki/MultiMarkdown-Syntax-Guide)
+
+Code vs Result sections was ommitted for simplicity's sake. It is best to check this document's code and preview side by side.
+
+<br>
 
 ## H2 - Headers example
 ### H3
 #### H4
 ##### H5
 ###### H6
+
+<br>
 
 ## Basics
 A paragraph.
@@ -89,6 +104,8 @@ Yet again, (https://www.x.org/wiki/), it still works.
 Typically it's good to enclose it in brackets like this:
 <https://www.x.org/wiki/>
 
+<br>
+
 ## Lists
 
 ### Unordered List
@@ -147,6 +164,28 @@ Typically it's good to enclose it in brackets like this:
 2. item 2
 - [X] item 3
 
+### Expandable List
+
+<details>
+  <summary>MyListName (Click me)</summary>  
+    
+  - Item 1
+  - Item 2
+  - Item 3
+
+</details>  
+
+### Collapsible List (already open)
+
+<details open>
+  <summary>MyListName (Click me)</summary>  
+    
+  1. Item 1
+  2. Item 2
+  3. Item 3
+
+</details>  
+
 ### Really Mixed List 2
 
 - This is a list that contains multiple code blocks.
@@ -169,6 +208,8 @@ Typically it's good to enclose it in brackets like this:
         > Blockquotes?
         > Not a problem!
         > ```
+
+<br>
 
 ## Section A
 
@@ -220,6 +261,24 @@ This is a test for emoji :smile:.  The emojis are images linked to github assets
 Testing the `kbd` tag: 
 <kbd>ctrl</kbd>+<kbd>alt</kbd>+<kbd>del</kbd>
 
+> **Note**  
+> Note to Self
+
+> **Warning**  
+> Do not Disturb
+
+<br>
+
 ## References
 
-**Work under progress**
+According to [this](https://stackoverflow.com/questions/25579868/how-to-add-footnotes-to-github-flavoured-markdown) StackOverflow thread, footnotes aren't supported. References do seem to work though. Strange..
+
+Footnotes / References can be manually created using links.
+For instance: [[Back to Top](#h1---markdown-format-testing)]
+
+Some long sentence. [^footnote1]
+
+Another long sentence. [^footnote2]
+
+[^footnote1]: Test Reference, John Doe, 1856, [Test link to Google](https://google.com).
+[^footnote2]: Same as above, [Google again](https://google.com).
