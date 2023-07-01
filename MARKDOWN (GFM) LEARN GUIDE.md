@@ -16,6 +16,7 @@ Typically unsupported tags: `title`, `textarea`, `style`, `xmp`, `iframe`, `noem
 - [John Gruber's guide to Markdown](https://daringfireball.net/projects/markdown/syntax "Official Markdown docs")
 - Fletcher T. Penney's [MultiMarkdown](https://en.wikipedia.org/wiki/MultiMarkdown "Wikipedia MultiMarkdown") and its
 [Syntax Guide](https://github.com/fletcher/MultiMarkdown/wiki/MultiMarkdown-Syntax-Guide)
+- Rahul Jain's [GitHub Profile README Generator](https://rahuldkjain.github.io/gh-profile-readme-generator/)
 
 Code vs Result sections was ommitted for simplicity's sake. It is best to check this document's code and preview side by side.
 
