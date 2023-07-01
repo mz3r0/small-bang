@@ -5,6 +5,8 @@ As I had to finally work on my GitHub, a great starting point were most of my ol
 
 ---
 
-Todo:
-
-Create a list of projects which has a list of modules which has a list of features.
+### Folders
+- Batch Files
+  - Equation - Simple math
+  - Random Game - Text animations
+  - Scan - A silly program I made for fun when I was 12 probably
