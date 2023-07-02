@@ -9,4 +9,4 @@ As I had to finally work on my GitHub, a great starting point were most of my ol
 - Batch Files
   - Equation - Simple math
   - Random Game - Text animations
-  - Scan - A silly program I made for fun when I was 12 probably
+  - Scan - A silly program I made for fun when I was a kid in 2014
