@@ -6,7 +6,7 @@ Common use case: formatting social media post descriptions (YouTube / Instagram)
 
 Started on 10/09/2021
 <br>
-Refactored on 02/07/2023
+Refactored on 12/07/2023
 
 ## How it works
 
@@ -76,6 +76,11 @@ Output: `yes`
 ## Keep in mind
 
 - In the syntax, newlines are not taken into account because of split.
+
+Fun fact: I initially wrote this code without knowing proper terms like 'token' and the method names were quite long,
+for example: callFunctionsWrapperOn() which now in 2023 sounds hillarious. More names include generateToFile, 
+elementPreOutputProcessing, callFunctionsWrapperOn from above and callFunctionsOn. They were inspired from the
+principles of the Clean Code book in an attempt to put what I had learned into practice.
 
 ## How to run
 
