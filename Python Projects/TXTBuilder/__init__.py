@@ -1,166 +1,196 @@
 # -*- coding: utf-8 -*-
+# Official Docs: https://github.com/mz3r0/small-bang/blob/main/Python%20Projects/TXTBuilder/README.md
 import re
-import mysql.connector
 
-'''
-Started on 10/09/2021.
-This is the initial script I used for generating descriptions for my
-YT channel. It has an unfinished database feature where I would pull
-the social links of electronic music artists by just mentioning their
-name in the input file.
+MAX_LINES = 1000000
+TXTB_EMPTY_STRING = ""
+CALL_FUNCTIONS_DEFAULT = True
+NR_OF_RECURSIONS_DEFAULT = -1
 
-The code after the 1st revision (Jul 2023) is much more readable and pretty.
-'''
 
 class TXTB:
-    def __init__(self,inputFileName,settingsFileName="builder.config"):
+    def __init__(self, inputName, settingsName="builder.config"):
         self.data = list()
         self.dataLen = 0
-        self.syntax = list()
-        self.dbCnx = None
+        self.tokens = list()
 
-        self.sheet = {
-            's': ' ',
-            't': '\t',
-            'n': '\n'
+        self.charSheet = {
+            's': ' ',  # Space
+            't': '\t',  # Tab
+            'n': '\n'  # Newline
         }
 
-        self.functions = {
+        self.methods = {
             'strip': TXTB_strip,
-            'rpl_newline' : TXTB_rpl_newline,
+            'rpl_newline': TXTB_rpl_newline,
             'caps': TXTB_to_caps,
+            'lower': TXTB_to_lower,
             'linktitle': TXTB_precede_minus,
-            'title' : TXTB_str_title,
+            'title': TXTB_str_title,
             'gametag': TXTB_audiosurf_gamemode
         }
 
-        with open(settingsFileName,'r',encoding="utf-8-sig") as fin:
+        with open(settingsName, 'r', encoding="utf-8-sig") as fin:
             GS = fin.readline()
             LS = fin.readline()
 
-        with open(inputFileName,'r',encoding="utf-8-sig") as fin:
-            allLines = fin.readlines(1000000)
+        with open(inputName, 'r', encoding="utf-8-sig") as fin:
+            allLines = fin.readlines(MAX_LINES)
 
-        removeCommentsFrom(allLines,LS)
-        oneText = ''.join(allLines) # join before splitting again on separators
+        self.filterComments(allLines, LS)
+        oneText = ''.join(allLines)  # join before splitting again on separators
 
-        # Get data section elements by splitting tmp accordingly
-        dataSection, syntaxSection = oneText.split(GS,1)
-        self.data = list(dataSection.split(LS))
+        sectionData, sectionSyntax = oneText.split(GS, 1)  # maxsplit feels redudant but I'll leave it
+        self.data = list(sectionData.split(LS))
         self.dataLen = len(self.data)
 
-        # Process syntax section.
-        for item in syntaxSection.split('\n'): # Removes newlines!
-            for sub_item in item.split():
-                self.syntax.append(sub_item)
+        # Tokenize while filtering newlines
+        self.tokenize(sectionSyntax)
 
-    def enableDatabase(self,host:str,user:str,password:str,database:str):
-        try:
-            self.dbCnx = mysql.connector.connect(
-                host=host,
-                user=user,
-                password=password,
-                database=database
-            )
-            print("Successfully connected to mySQL!")
-        except:
-            print("Cannot connect to database") # TODO HANDLE DIFFERENTLY
+    def tokenize(self, sectionSyntax):
+        """Prepares self.tokens"""
+        for chunk in sectionSyntax.split('\n'):  # residual empty strings are created: ''
+            for token in chunk.split():  # ''.split() == [] is True
+                self.tokens.append(token)  # this doesn't run if chunk.split() == []
 
-    def disableDatabase(self):
-        self.dbCnx.close()
+    def filterComments(self, lines, LS):
+        for index, line in enumerate(lines):
+            matchComment = re.search("^" + LS + " ", line)
+            matchDefault = True if line == LS + '\n' else False
+            if matchComment or matchDefault:
+                lines[index] = LS
 
-    def generateToFile(self,outputFileName):
-        liveInputFlag = False
-        modifyPromptMsgFlag = False
-        modifyPromptElement = ""
-        userPrompt = ""
+    def generateTxt(self, outputName):
+        promptFlag = False
+        methodsToken = ""  # Redundant assignment
+        userPrompt = ""  # Redundant assignment
 
-        with open(outputFileName,'w',encoding="utf-8") as fout: # overwrite if exists
-            for element in self.syntax:
-                userPromptCondition = element == "~" or element[0] == "~"
+        with open(outputName, 'w', encoding="utf-8") as fout:  # overwrite if exists
+            for token in self.tokens:
+                
+                if token[0] == "~":
+                    promptFlag = not promptFlag     # Switch flag
+                    
+                    if promptFlag:  # Prompt beginning
+                        methodsToken = token
+                    else:  # Prompt end - ask user
+                        if len(methodsToken.split('.')) > 1:
+                            userPrompt = self.functionWrap(userPrompt, methodsToken)
+                        userInput = input(userPrompt + ': ')
+                        fout.write(self.functionWrap(userInput, token))
+                        userPrompt = ""  # Redundant assignment
 
-                if userPromptCondition:
-                    liveInputFlag = not liveInputFlag
+                    continue  # to the next element
 
-                    if liveInputFlag: # Prompt beginning
-                        elementSplit = element.split('.')
-                        if len(elementSplit) > 1:
-                            modifyPromptMsgFlag = True
-                            modifyPromptElement = element
-
-                    else: # Prompt end - ask user
-                        if modifyPromptMsgFlag:
-                            userPrompt = self.callFunctionsWrapperOn(userPrompt,modifyPromptElement)
-                            modifyPromptMsgFlag = False
-                        userInput = input(userPrompt.strip() + ': ')
-                        resultingElement = self.callFunctionsWrapperOn(userInput,element)
-                        fout.write(resultingElement)
-                        userPrompt = ""
-
-                    continue # to the next element
-
-                if liveInputFlag:
-                    resultingElement = self.elementPreOutputProcessing(element)
-                    userPrompt += ' ' + resultingElement
+                if promptFlag:
+                    userPrompt += ' ' + self.tokenInterpreter(token)
                 else:
-                    resultingElement = self.elementPreOutputProcessing(element)
-                    fout.write(resultingElement)
+                    fout.write(self.tokenInterpreter(token))
 
-    def elementPreOutputProcessing(self,element:str):
-        justElement = element.split('.')[0]
-        if justElement in self.sheet:
-            tmpOutput = self.sheet[justElement]
-        elif justElement.isnumeric():
-            if int(justElement) < self.dataLen:
-                tmpOutput = self.data[int(justElement)]
-            else:
-                tmpOutput = ""
-                pass  # TODO THROW EXCEPTION
-        else:
-            tmpOutput = justElement
-        resultingElement = self.callFunctionsWrapperOn(tmpOutput,element)
-        return resultingElement
-
-    def callFunctionsWrapperOn(self,target:str,element:str):
+    def functionWrap(self, targetText, methodsToken):
         # Modify target based on element's function calls
-        elementSplit = element.split('.')
-        functionCalls = elementSplit[1:] if len(elementSplit) > 1 else list()
-        if not functionCalls:
-            return target
-        result = self.callFunctionsOn(target,functionCalls)
+        functionNames = methodsToken.split('.')[1:]     # [] is returned if length is 1
+        if not functionNames:                           # not [] is True therefore no function wrap
+            return targetText
+        result = self.callFunctionsOn(targetText, functionNames)
         return result
 
-    def callFunctionsOn(self,target:str,functionCalls:list):
-        parameters = {'data': target}
-        for f in functionCalls:
-            if f in self.functions:
-                target = self.functions[f](**parameters)
-                parameters = {'data': target}
+    def tokenInterpreter(self, token, callFunctions=CALL_FUNCTIONS_DEFAULT):
+        """
+        Can also interpret tokens such as: arbitraryText.caps and 3.strip.
+        The token ~ never makes it here.
+        CALL_FUNCTIONS_DEFAULT is True.
+        """
+        baseToken = token.split('.')[0]
+
+        if baseToken in self.charSheet:             # Character Sheet token?
+            t = self.charSheet[baseToken]
+
+        elif baseToken.isnumeric():                 # Index token?
+            if int(baseToken) < self.dataLen:
+                t = self.data[int(baseToken)]
             else:
-                print("Call not found: " + f) # TODO THROW EXCEPTION
-        return target
+                print("OUT OF BOUNDS IN DATA LIST")
+                t = ""  # TODO THROW EXCEPTION
 
-def removeCommentsFrom(lines:list,LS):
-    # print(lines)
-    for index, line in enumerate(lines):
-        matched = re.search("^"+LS+" ",line)
-        if matched:
-            lines[index] = LS
+        else:
+            t = baseToken                           # None of the above, no parsing so far
 
-#builder = TXTB("commands2.txt")
-#builder.generateToFile("output.txt")
+        if not callFunctions:
+            return t
+        return self.functionWrap(t, token)  # t is always assignmed
 
-def TXTB_strip(data = ""):
+    def callFunctionsOn(self, targetText, functionNames):
+        """Reusable and minimal"""
+        # args = {'data': targetText}   # **dict(args) is also an option
+        for f in functionNames:     # Does f exist in the dict keys?
+            if f in self.methods:
+                targetText = self.methods[f](targetText)
+            else:
+                print("Call not found: " + f)  # TODO THROW EXCEPTION
+        return targetText
+
+    def generateTxtMinimal(self, outputName):
+        with open(outputName, 'w', encoding="utf-8") as fout:
+            fout.write(' ')
+            for token in self.tokens:
+                interpretedToken = self.tokenInterpreter(token, False)
+                # print('\nInt:' + interpretedToken, end="")
+                fout.write(interpretedToken + ' ')
+
+        self.tokens = list()    # Empty the tokens
+
+        # Read the output back in
+        with open(outputName, 'r', encoding="utf-8") as fin:
+            allLines = fin.readlines(MAX_LINES)
+
+        # Tokenize anew
+        self.tokenize(''.join(allLines))
+
+    def generateRR(self, outputName, recursions=NR_OF_RECURSIONS_DEFAULT):
+        """
+        Generates the output which is reused as input.
+        Keeps track of statistics.
+        """
+        for i, dataElement in enumerate(self.data):
+            self.data[i] = dataElement.strip()   # TODO Turn this into a lambda
+
+        while recursions == -1:
+            self.generateTxtMinimal(outputName)     # TODO Save the output in a statistics file
+            userContinue = input("+1 Recursion? (y/n): ")
+            if userContinue.lower() == 'y':
+                continue
+            else:
+                return
+
+        while recursions > 0:
+            self.generateTxtMinimal(outputName)     # TODO Save the output in a statistics file
+            recursions = recursions - 1
+
+        return
+
+
+# TXTB FUNCTIONS USED IN THE METHODS DICTIONARY
+
+
+def TXTB_strip(data=TXTB_EMPTY_STRING):
     return data.strip()
 
-def TXTB_to_caps(data = ""):
+
+def TXTB_to_caps(data=TXTB_EMPTY_STRING):
     return data.upper()
 
-def TXTB_precede_minus(data = ""):
-    return "- " + data
 
-def TXTB_audiosurf_gamemode(data = ""):
-    if data == "none":
+def TXTB_to_lower(data=TXTB_EMPTY_STRING):
+    return data.lower()
+
+
+def TXTB_precede_minus(data=TXTB_EMPTY_STRING):
+    return "- " + data.title()
+
+
+def TXTB_audiosurf_gamemode(data=TXTB_EMPTY_STRING):
+    if data == "none" or data == TXTB_EMPTY_STRING:
         return "None"
     result = ""
     tmp = data.split()
@@ -172,15 +202,10 @@ def TXTB_audiosurf_gamemode(data = ""):
         result = "[as-" + data + "]"
     return result
 
-def TXTB_rpl_newline(data = ""):
+
+def TXTB_rpl_newline(data=""):
     return data.replace("\n ", "\n")
 
-def TXTB_str_title(data = ""):
-    return data.title()
 
-#builder = TXTB("commands.txt")
-#builder.enableDatabase("localhost","root","","audiosurf")
-#builder.disableDatabase()
-#builder.generateToFile("output.txt")
-#print(builder.data)
-#print(builder.syntax)
+def TXTB_str_title(data=""):
+    return data.title()
