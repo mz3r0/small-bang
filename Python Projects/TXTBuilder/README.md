@@ -36,7 +36,7 @@ Syntax elements are **delimited by whitespace** which doesn't affect the output*
 
 Sytnax elements can be numbers, but also characters. These characters exist in a special dictionary called **charSheet**. For example, character `n` at input results in `charSheet['n']` which equals to `\n`. This is how **spaces**, **tabs** and **newlines** are inserted. If the input character (or string) doesn't exist in the sheet, it is sent to output as it is. To be more specific, in the syntax and outside user prompts, anything that isnt a numeric value or a charSheet key will be treated as a constant and will show up in the output.
 
-- x - Any number within `[0, len(data)]`
+- x - Any number within `[0, len(data)-1]`
 - s - Space
 - t - Tab
 - n - Newline
