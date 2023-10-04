@@ -13,7 +13,7 @@ Refactored on 12/07/2023
 ```python
 import txtbuilder as txtb
 builder = TXTB("input.txt")
-builder.generateToFile("output.txt")
+builder.generateTxt("output.txt")
 ```
 
 ## How it works
