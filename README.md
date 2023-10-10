@@ -9,3 +9,4 @@ The initial spark of my programming career. Old small projects.
   - Random Game - Text animations
   - Scan - A silly program I made for fun when I was a kid in 2014
 - Python Projects
+  - TXTBuilder - A text parser for generating various text files based on templates
