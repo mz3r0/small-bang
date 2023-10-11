@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Official Docs: https://github.com/mz3r0/small-bang/blob/main/Python%20Projects/TXTBuilder/README.md
+# Official repo: https://github.com/mz3r0/txtbuilder
+# Last edit 11/10/2023
 import re
 import random
 
