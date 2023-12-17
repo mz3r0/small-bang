@@ -1,6 +1,9 @@
 import sys
 import argparse
 
+# Sources:
+# https://docs.python.org/3/library/argparse.html
+
 args_sys = sys.argv[1:]
 
 parser = argparse.ArgumentParser(
@@ -19,7 +22,7 @@ parser.add_argument('-c', '--count')
 parser.add_argument('-v', '--verbose',
                     action='store_true') # accessible after parsing via args.verbose
 parser.add_argument('-w', '--whatever',
-                    action='store_true') # accessible via args.kappa
+                    action='store_true') # accessible via args.whatever
 parser.add_argument('-l') # Accessible via args.l
 
 args = parser.parse_args()
