@@ -39,12 +39,12 @@ try:
 			for item in s:
 				fout.write(item + delimiter_out)
 except FileNotFoundError as e:
-	print('Exiting with error message:',
-	   e.args[0] if len(e.args) else 'N/A')
+	print(f'{type(e)} Exiting with error message:',
+		e.args[0] if len(e.args) else 'N/A')
 	exit()
 except OSError as e:
-	print('Exiting with error message:',
-	   e.args[0] if len(e.args) else 'N/A')
+	print(f'{type(e)} Exiting with error message:',
+		e.args[0] if len(e.args) else 'N/A')
 	exit()
 
 print('Success!')
