@@ -40,11 +40,11 @@ try:
 				fout.write(item + delimiter_out)
 except FileNotFoundError as e:
 	print('Exiting with error message:',
-	   getattr(e,'message','N/A'))
+	   e.args[0] if len(e.args) else 'N/A')
 	exit()
 except OSError as e:
 	print('Exiting with error message:',
-	   getattr(e,'message','N/A'))
+	   e.args[0] if len(e.args) else 'N/A')
 	exit()
 
 print('Success!')
