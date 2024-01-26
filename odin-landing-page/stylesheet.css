@@ -102,6 +102,10 @@ nav {
     flex: 1;
 }
 
+#hero-section img {
+    width: 0;
+}
+
 #hero-section p {
     margin-right: 50px;
     padding-top: 12px;
