@@ -102,10 +102,24 @@ ul {
 }
 
 .info li {
-    width: 250px;
+    width: 200px;
+    flex: 1;
+}
+
+.info img {
+    border-radius: 10%;
+}
+
+.info p {
+    margin-top: 5px;
+    color: #1F2937;
+}
+
+.info .section-wrapper {
+    flex-direction: column;
 }
 
 .info ul {
     display: flex;
+    gap: 50px;
 }
-
