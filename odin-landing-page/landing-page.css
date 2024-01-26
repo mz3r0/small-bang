@@ -29,6 +29,10 @@ img {
     margin: 0;
 }
 
+.hero img {
+    min-width: 0;
+}
+
 nav p {
     font-size: 24px;
     color: #F9FAF8;
