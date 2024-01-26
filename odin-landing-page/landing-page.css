@@ -68,6 +68,7 @@ button {
 }
 
 #quote {
+    padding: 0;
     font-size: 36px;
     font-style: italic;
     color: #1F2937;
@@ -126,4 +127,17 @@ ul {
 .info ul {
     display: flex;
     gap: 50px;
+}
+
+.quote-section {
+    padding: 140px 130px;
+}
+
+.quote-section .section-wrapper {
+    flex-direction: column;
+}
+
+.quote-section .section-wrapper * {
+    margin: 0;
+    padding: 0;
 }
