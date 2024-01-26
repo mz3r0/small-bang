@@ -101,6 +101,7 @@ img {
     width: 100%;
 }
 
-.info .section-wrapper ul {
+.info ul {
     display: flex;
 }
+
