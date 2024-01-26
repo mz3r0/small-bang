@@ -2,8 +2,12 @@ html {
     font-family: roboto, sans-serif;
 }
 
+img {
+    width: 100%;
+}
+
 .section-wrapper, nav {
-    width: 80%;
+    width: 70%;
     margin: 0 auto;
     display: flex;
 }
@@ -85,6 +89,10 @@ nav {
     gap: 40px;
 }
 
+.hero .flex-item {
+    flex: 1;
+}
+
 .info {
     text-align: center;
 }
@@ -95,10 +103,6 @@ ul {
 
 .info li {
     width: 250px;
-}
-
-img {
-    width: 100%;
 }
 
 .info ul {
