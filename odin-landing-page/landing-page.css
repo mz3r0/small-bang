@@ -58,6 +58,8 @@ button {
 }
 
 #information-header {
+    margin-top: 40px;
+    margin-bottom: 50px;
     font-size: 36px;
     font-weight: 800;
     color: #1F2937;
@@ -100,6 +102,7 @@ nav {
 
 .info {
     text-align: center;
+    padding-bottom: 100px;
 }
 
 ul {
@@ -108,7 +111,6 @@ ul {
 
 .info li {
     width: 200px;
-    flex: 1;
 }
 
 .info img {
@@ -125,7 +127,9 @@ ul {
 }
 
 .info ul {
+    margin: 0;
     display: flex;
+    justify-content: center;
     gap: 50px;
 }
 
