@@ -4,7 +4,7 @@
 
 import logging
 
-def main() -> None:
+def main():
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s %(levelname)s %(message)s',
