@@ -2,7 +2,7 @@ from pathlib import Path
 import logging
 import datetime
 
-log_filename = datetime.datetime.now().strftime('%Y-%m-%d-view-file-tree.log')
+log_filename = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S-view-file-tree.log')
 
 logging.basicConfig(
         level=logging.DEBUG,
