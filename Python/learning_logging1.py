@@ -1,3 +1,7 @@
+# learning_logging1.py
+
+# basic logging to console
+
 import logging
 
 def main() -> None:
