@@ -12,7 +12,7 @@ logging.basicConfig(
     )
 
 NR_OF_SPACES = 2
-input_path = Path('C:\Windows\System32\Microsoft')
+input_path = Path('C:\\Windows\\System32\\Microsoft')
 indentation = ' ' * NR_OF_SPACES
 
 
@@ -54,12 +54,13 @@ while len(path_stack) != 0 and len(file_count_stack) != 0:
             path_stack = sub_items
 
     except PermissionError as permission_e:
-        print(lvl * indentation + item.name + 'ERROR (view log)')
+        print(lvl * indentation + 'ERROR (view log)')
         logging.error(permission_e)
         continue
     except Exception as e:
         logging.critical(e)
         logging.critical(type(e))
+        continue
 
 
 # STEP 3. Clean residual log if not used
