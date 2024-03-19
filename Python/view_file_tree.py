@@ -34,11 +34,11 @@ while len(path_stack) != 0 and len(file_count_stack) != 0:
         item = path_stack.pop(0)
         file_count_stack[0] -= 1
 
+        print(lvl * indentation + item.name)
+
         if file_count_stack[0] == 0:
             file_count_stack.pop(0)
             lvl -= 1
-
-        print(lvl*indentation + item.name)
 
         if item.is_dir():
             lvl += 1
