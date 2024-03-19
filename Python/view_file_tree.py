@@ -1,7 +1,9 @@
 from pathlib import Path
 import logging
 import datetime
+import sys
 
+prog_name = 'view-file-tree'
 log_filename = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S-view-file-tree.log')
 
 logging.basicConfig(
@@ -12,11 +14,15 @@ logging.basicConfig(
     )
 
 NR_OF_SPACES = 2
-input_path = Path('C:\\Windows\\System32\\Microsoft')
 indentation = ' ' * NR_OF_SPACES
 
 
 # STEP 1. Verify the input
+if len(sys.argv) == 2:
+    input_path = Path(sys.argv[1])
+else:
+    print(f'{prog_name} expects 1 path argument!')
+
 if not input_path.is_dir():
     print('Input is not a directory!')
     raise SystemExit(1)
