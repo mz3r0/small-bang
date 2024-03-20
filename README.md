@@ -12,6 +12,7 @@ The initial spark of my programming career. Old small projects.
   - TXTBuilder - A CLI template & data matching text file generator
   - keylogger.py - WIP
   - View file tree - CLI tool
+  - Script runner - WIP
 - Python Learning
   - argparse module
   - logging module
