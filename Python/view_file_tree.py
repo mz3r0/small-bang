@@ -76,6 +76,7 @@ logging.basicConfig(
         filename=LOG_FILENAME
     )
 
+
 # STEP 1. VERIFY THE INPUT
 
 if not (input_path := Path(args.target_dir)).is_dir():
@@ -98,6 +99,7 @@ print(f'Starting in {input_path}')
 
 
 # STEP 2. DFS
+
 path_stack = list(input_path.iterdir()) # can only append or pop
 file_count_stack = [len(path_stack)]
 lvl = 0
@@ -163,20 +165,20 @@ logging.debug(f'lvl after execution: {lvl}')
 logging.debug(f'file_count_stack after execution: {file_count_stack}')
 
 
-# STEP 3. Clean residual log file if not used
+# STEP 3. CLEAN RESIDUAL LOG FILE IF NOT USED
 
 if close_logging(LOG_FILENAME):
     print_success()
     raise SystemExit(0)
-elif not LOGGING_LEVEL == logging.DEBUG:
+elif not LOGGING_LEVEL == logging.DEBUG: # Non-empty log & disabled debugging
     print_fail()
     raise SystemExit(4)
 else:
-    print('=-=-=\nCheck log!\n=-=-=\n',end='')
+    print('=-=-=\nCheck log!\n=-=-=\n',end='') # Non-empty log because of debugging
 
 
-# STEP 4. Verifications
+# STEP 4. VERIFICATIONS
 
-if lvl == 0 or (depth_limit == 0 and lvl == -1): # and takes precedence but parenthesis are for clarity
+if lvl == 0 or (depth_limit == 0 and lvl == -1): # 'and' takes precedence but parenthesis are for clarity
     print_success()
     raise SystemExit(0)
