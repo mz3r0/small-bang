@@ -6,7 +6,7 @@ from functools import wraps
 def add_numbers(n):
     i = 0
     s = 0
-    
+
     if n == 0:
         return
 
@@ -59,8 +59,11 @@ with Benchmark_CM('Task'):
 # Way #3 - Benchmarking Function Decorator
 
 def benchmarking_decorator(func_to_run):
-    @wraps(func_to_run)
+    
+    # To preserve metadata of the decorated function we use
+    # functools.wraps and decorate our wrapper function
 
+    @wraps(func_to_run) 
     def wrapper(*args, **kwargs):
         time_start = time.time()
         result = func_to_run(*args, **kwargs)
